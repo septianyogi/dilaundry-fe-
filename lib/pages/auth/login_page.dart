@@ -9,7 +9,9 @@ import 'package:dilaundry/config/app_colors.dart';
 import 'package:dilaundry/config/app_constants.dart';
 import 'package:dilaundry/config/app_response.dart';
 import 'package:dilaundry/config/failure.dart';
+import 'package:dilaundry/config/nav.dart';
 import 'package:dilaundry/datasource/user_datasource.dart';
+import 'package:dilaundry/pages/auth/register_page.dart';
 import 'package:dilaundry/providers/register_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,73 +19,72 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterPage extends ConsumerStatefulWidget {
-  const RegisterPage({super.key});
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  ConsumerState<RegisterPage> createState() => _RegisterPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends ConsumerState<RegisterPage> {
-  final edtUsername = TextEditingController();
+class _LoginPageState extends ConsumerState<LoginPage> {
   final edtEmail = TextEditingController();
   final edtPassword = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   execute() {
-    bool validInput = formKey.currentState!.validate();
-    if (!validInput) return;
+    // bool validInput = formKey.currentState!.validate();
+    // if (!validInput) return;
 
-    setRegisterStatus(ref, 'Loading');
+    // setRegisterStatus(ref, 'Loading');
 
-    UserDatasource.register(
-      edtUsername.text,
-      edtEmail.text,
-      edtPassword.text,
-    ).then((value) {
-      String newStatus = '';
-      value.fold(
-        (failure) {
-          switch (failure.runtimeType) {
-            case ServerFailure:
-            newStatus = 'Server Error';
-              DInfo.toastError(newStatus);
-              break;
-            case NotFoundFailure:
-            newStatus = 'Error Not FOund';
-              DInfo.toastError(newStatus);
-              break;
-            case ForbiddenFailure:
-            newStatus = 'You don\'t have access';
-              DInfo.toastError(newStatus);
-              break;
-            case BadRequestFailure:
-            newStatus = 'Bad request';
-              DInfo.toastError(newStatus);
-              break;
-            case InvalidInputFailure:
-            newStatus = 'Invalid input';
-              AppResponse.invalidInput(context, failure.message ?? '{}');
-              break;
-            case UnauthorisedFailure:
-            newStatus = 'Unauthorised';
-              DInfo.toastError(newStatus);
-              break;
-            default:
-              newStatus = 'Request Error';
-              DInfo.toastError(newStatus);
-              newStatus = failure.message??'-';
-              DInfo.toastError(newStatus);
-              break;
-          }
-          setRegisterStatus(ref, newStatus);
-        }, 
-        (result) {
-          DInfo.toastSuccess('Register success');
-          setRegisterStatus(ref, 'Success');
-        }
-      );
-    });
+    // UserDatasource.register(
+    //   edtUsername.text,
+    //   edtEmail.text,
+    //   edtPassword.text,
+    // ).then((value) {
+    //   String newStatus = '';
+    //   value.fold(
+    //     (failure) {
+    //       switch (failure.runtimeType) {
+    //         case ServerFailure:
+    //         newStatus = 'Server Error';
+    //           DInfo.toastError(newStatus);
+    //           break;
+    //         case NotFoundFailure:
+    //         newStatus = 'Error Not FOund';
+    //           DInfo.toastError(newStatus);
+    //           break;
+    //         case ForbiddenFailure:
+    //         newStatus = 'You don\'t have access';
+    //           DInfo.toastError(newStatus);
+    //           break;
+    //         case BadRequestFailure:
+    //         newStatus = 'Bad request';
+    //           DInfo.toastError(newStatus);
+    //           break;
+    //         case InvalidInputFailure:
+    //         newStatus = 'Invalid input';
+    //           AppResponse.invalidInput(context, failure.message ?? '{}');
+    //           break;
+    //         case UnauthorisedFailure:
+    //         newStatus = 'Unauthorised';
+    //           DInfo.toastError(newStatus);
+    //           break;
+    //         default:
+    //           newStatus = 'Request Error';
+    //           DInfo.toastError(newStatus);
+    //           newStatus = failure.message??'-';
+    //           DInfo.toastError(newStatus);
+    //           break;
+    //       }
+    //       setRegisterStatus(ref, newStatus);
+    //     }, 
+    //     (result) {
+    //       DInfo.toastSuccess('Register success');
+    //       setRegisterStatus(ref, 'Success');
+    //     }
+    //   );
+    // });
   }
 
   @override
@@ -144,35 +145,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   key: formKey,
                   child: Column(
                     children: [
-                      IntrinsicHeight(
-                        child: Row(
-                          children: [
-                            AspectRatio(
-                              aspectRatio: 1,
-                              child: Material(
-                                color: Colors.white70,
-                                borderRadius: BorderRadius.circular(10),
-                                child: const Icon(
-                                  Icons.person,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ),
-                            DView.width(10),
-                            Expanded(
-                              child: DInput(
-                                controller: edtUsername,
-                                fillColor: Colors.white70,
-                                hint: 'Username',
-                                radius: BorderRadius.circular(10),
-                                validator: (input) =>
-                                  input == '' ? "Don't empty" : null,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      DView.height(16),
+                      
                       IntrinsicHeight(
                         child: Row(
                           children: [
@@ -238,13 +211,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               aspectRatio: 1,
                               child: DButtonFlat(
                                 onClick: () {
-                                  Navigator.pop(context);
+                                  Nav.push(context, const RegisterPage());
                                 },
                                 padding: const EdgeInsets.all(0),
                                 radius: 10,
                                 mainColor: Colors.white70,
                                 child: const Text(
-                                  'LOG',
+                                  'REG',
                                   style: TextStyle(
                                     color: Colors.green,
                                     fontWeight: FontWeight.bold,
@@ -266,7 +239,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                       alignment: Alignment.centerLeft,
                                     ),
                                     child: const Text(
-                                      'Register',
+                                      'Login',
                                       style: TextStyle(
                                         color: Colors.white
                                       ),

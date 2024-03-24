@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_import, prefer_const_constructors, unnecessary_to_list_in_spreads
+
 import 'dart:convert';
 
 import 'package:d_method/d_method.dart';
