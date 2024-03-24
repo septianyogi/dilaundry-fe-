@@ -8,11 +8,13 @@ import 'package:dilaundry/config/app_assets.dart';
 import 'package:dilaundry/config/app_colors.dart';
 import 'package:dilaundry/config/app_constants.dart';
 import 'package:dilaundry/config/app_response.dart';
+import 'package:dilaundry/config/app_session.dart';
 import 'package:dilaundry/config/failure.dart';
 import 'package:dilaundry/config/nav.dart';
 import 'package:dilaundry/datasource/user_datasource.dart';
 import 'package:dilaundry/pages/auth/register_page.dart';
-import 'package:dilaundry/providers/register_provider.dart';
+import 'package:dilaundry/pages/dashboard_page.dart';
+import 'package:dilaundry/providers/login_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -32,59 +34,61 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final formKey = GlobalKey<FormState>();
 
   execute() {
-    // bool validInput = formKey.currentState!.validate();
-    // if (!validInput) return;
+    bool validInput = formKey.currentState!.validate();
+    if (!validInput) return;
 
-    // setRegisterStatus(ref, 'Loading');
+    setLoginStatus(ref, 'Loading');
 
-    // UserDatasource.register(
-    //   edtUsername.text,
-    //   edtEmail.text,
-    //   edtPassword.text,
-    // ).then((value) {
-    //   String newStatus = '';
-    //   value.fold(
-    //     (failure) {
-    //       switch (failure.runtimeType) {
-    //         case ServerFailure:
-    //         newStatus = 'Server Error';
-    //           DInfo.toastError(newStatus);
-    //           break;
-    //         case NotFoundFailure:
-    //         newStatus = 'Error Not FOund';
-    //           DInfo.toastError(newStatus);
-    //           break;
-    //         case ForbiddenFailure:
-    //         newStatus = 'You don\'t have access';
-    //           DInfo.toastError(newStatus);
-    //           break;
-    //         case BadRequestFailure:
-    //         newStatus = 'Bad request';
-    //           DInfo.toastError(newStatus);
-    //           break;
-    //         case InvalidInputFailure:
-    //         newStatus = 'Invalid input';
-    //           AppResponse.invalidInput(context, failure.message ?? '{}');
-    //           break;
-    //         case UnauthorisedFailure:
-    //         newStatus = 'Unauthorised';
-    //           DInfo.toastError(newStatus);
-    //           break;
-    //         default:
-    //           newStatus = 'Request Error';
-    //           DInfo.toastError(newStatus);
-    //           newStatus = failure.message??'-';
-    //           DInfo.toastError(newStatus);
-    //           break;
-    //       }
-    //       setRegisterStatus(ref, newStatus);
-    //     }, 
-    //     (result) {
-    //       DInfo.toastSuccess('Register success');
-    //       setRegisterStatus(ref, 'Success');
-    //     }
-    //   );
-    // });
+    UserDatasource.login(
+      edtEmail.text,
+      edtPassword.text,
+    ).then((value) {
+      String newStatus = '';
+      value.fold(
+        (failure) {
+          switch (failure.runtimeType) {
+            case ServerFailure:
+            newStatus = 'Server Error';
+              DInfo.toastError(newStatus);
+              break;
+            case NotFoundFailure:
+            newStatus = 'Error Not FOund';
+              DInfo.toastError(newStatus);
+              break;
+            case ForbiddenFailure:
+            newStatus = 'You don\'t have access';
+              DInfo.toastError(newStatus);
+              break;
+            case BadRequestFailure:
+            newStatus = 'Bad request';
+              DInfo.toastError(newStatus);
+              break;
+            case InvalidInputFailure:
+            newStatus = 'Invalid input';
+              AppResponse.invalidInput(context, failure.message ?? '{}');
+              break;
+            case UnauthorisedFailure:
+            newStatus = 'Login Failed';
+              DInfo.toastError(newStatus);
+              break;
+            default:
+              newStatus = 'Request Error';
+              DInfo.toastError(newStatus);
+              newStatus = failure.message??'-';
+              DInfo.toastError(newStatus);
+              break;
+          }
+          // setLoginStatus(ref, newStatus);
+        }, 
+        (result) {
+          AppSession.setUser(result['data']);
+          AppSession.setBearerToken(result['token']);
+          DInfo.toastSuccess('Login success');
+          setLoginStatus(ref, 'Success');
+          Nav.replace(context, const DashboardPage());
+        }
+      );
+    });
   }
 
   @override
@@ -229,7 +233,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               Expanded(
                                 child: Consumer(
                                 builder: (_,wiRef, __) {
-                                  String status = wiRef.watch(registerStatusProvider);
+                                  String status = wiRef.watch(loginStatusProvider);
                                   if(status == 'Loading') {
                                     return DView.loadingCircle();
                                   }
