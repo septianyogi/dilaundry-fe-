@@ -1,3 +1,3 @@
-# dilaundry
+# Dilaundry
 
 A new Flutter project.
