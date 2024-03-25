@@ -78,7 +78,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               DInfo.toastError(newStatus);
               break;
           }
-          // setLoginStatus(ref, newStatus);
+          setLoginStatus(ref, newStatus);
         }, 
         (result) {
           AppSession.setUser(result['data']);
