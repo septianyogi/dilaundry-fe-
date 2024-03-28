@@ -7,10 +7,12 @@ import 'package:dilaundry/config/app_colors.dart';
 import 'package:dilaundry/config/app_constants.dart';
 import 'package:dilaundry/config/app_format.dart';
 import 'package:dilaundry/config/failure.dart';
+import 'package:dilaundry/config/nav.dart';
 import 'package:dilaundry/datasource/promo_datasource.dart';
 import 'package:dilaundry/datasource/shop_datasource.dart';
 import 'package:dilaundry/models/promo_model.dart';
 import 'package:dilaundry/models/shop_model.dart';
+import 'package:dilaundry/pages/search_by_city.dart';
 import 'package:dilaundry/providers/home_provider.dart';
 import 'package:dilaundry/widgets/error_background.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +33,9 @@ class HomeView extends ConsumerStatefulWidget {
 class _HomeViewState extends ConsumerState<HomeView> {
   static final edtSearch = TextEditingController();
 
-  gotoSearchCity() {}
+  gotoSearchCity() {
+    Nav.push(context, SearchByCityPage(query: edtSearch.text));
+  }
 
   getPromo() {
     PromoDataSource.readLimit().then((value) {

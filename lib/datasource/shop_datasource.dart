@@ -25,4 +25,22 @@ class ShopDataSource {
       return Left(FetchFailure(e.toString()));
     }
   }
+
+  static Future<Either<Failure,Map>> searchByCity(String name) async {
+    Uri url = Uri.parse('${AppConstant.baseURL}/shop/search/city/$name'); // "/promo/limit sesuaikan dengan api.php"
+    final token = await AppSession.getBearerToken();
+    try {
+      final response = await http.get(
+      url,
+      headers: AppRequest.header(token),
+      );
+      final data = AppResponse.data(response);
+      return Right(data);
+    } catch (e) {
+      if(e is Failure) {
+        return Left(e);
+      }
+      return Left(FetchFailure(e.toString()));
+    }
+  }
 }
