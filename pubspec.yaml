@@ -15,11 +15,13 @@ dependencies:
   dartz: ^0.10.1
   flutter:
     sdk: flutter
+  flutter_rating_bar: ^4.0.1
   flutter_riverpod: ^2.5.1
   google_fonts: ^6.2.1
   http: ^1.2.1
   intl: ^0.18.1
   shared_preferences: ^2.2.2
+  smooth_page_indicator: ^1.1.0
   
 dev_dependencies:
   flutter_test:
