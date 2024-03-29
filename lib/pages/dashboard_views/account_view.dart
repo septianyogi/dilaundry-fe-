@@ -226,7 +226,7 @@ class AccountView extends StatelessWidget {
                   applicationVersion: 'v1.0.0',
                   children: [
                     const Text(
-                      'Laundry market App to monitor yaour laundry status'
+                      'Laundry market App to monitor your laundry status'
                     ),
                   ],
                 );

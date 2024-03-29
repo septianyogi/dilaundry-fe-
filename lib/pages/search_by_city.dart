@@ -3,8 +3,10 @@
 import 'package:d_view/d_view.dart';
 import 'package:dilaundry/config/app_colors.dart';
 import 'package:dilaundry/config/failure.dart';
+import 'package:dilaundry/config/nav.dart';
 import 'package:dilaundry/datasource/shop_datasource.dart';
 import 'package:dilaundry/models/shop_model.dart';
+import 'package:dilaundry/pages/detail_shop_page.dart';
 import 'package:dilaundry/providers/search_by_city_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -129,7 +131,9 @@ class _SearchByCityPageState extends ConsumerState<SearchByCityPage> {
               itemBuilder: (context, index) {
                 ShopModel shop = list[index];
                 return ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Nav.push(context, DetailShopPage(shop: shop));
+                  },
                   leading:  CircleAvatar(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,

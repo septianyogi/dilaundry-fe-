@@ -12,10 +12,10 @@ class AppFormat {
   }
 
   static String longPrice(num number) {
-    return NumberFormat.compactCurrency(
+    return NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp',
-      decimalDigits: 0,
+      decimalDigits: 000,
     ).format(number);
   }
 
