@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import, unnecessary_import, prefer_const_constructors
 
+import 'package:d_info/d_info.dart';
 import 'package:d_view/d_view.dart';
 import 'package:dilaundry/config/app_assets.dart';
 import 'package:dilaundry/config/app_colors.dart';
@@ -8,13 +9,36 @@ import 'package:dilaundry/config/app_format.dart';
 import 'package:dilaundry/models/shop_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 class DetailShopPage extends StatelessWidget {
   const DetailShopPage({super.key, required this.shop});
   final ShopModel shop;
+
+  launchWA(BuildContext context, String number) async {
+    bool? yes = await DInfo.dialogConfirmation(
+      context,
+      'Chat via Whatsapp',
+      'Yes to confirm'
+    );
+    if(yes??false) {
+      final link = WhatsAppUnilink(
+        phoneNumber: '6288225403007',
+        text: 'Helo, I want to order a laundry service',
+      );
+      if(await canLaunchUrl(link.asUri())) {
+        launchUrl(
+          link.asUri(),
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +48,84 @@ class DetailShopPage extends StatelessWidget {
         children: [
           headerImage(context),
           DView.height(10),
-          groupItemInfo(),
-          DView.height(10),
-          Wrap(
-            children: [
-              'Regular',
-              'Express',
-              'Economical',
-              'Exclusive',
-            ].map((e) {
-              return Chip(
-                label: Text(e, style: const TextStyle(height: 1),));
-            }).toList(),
-          )
+          groupItemInfo(context),
+          DView.height(20),
+          category(),
+          DView.height(20),
+          description(),
+          DView.height(20),
+          Container(
+            height: 50,
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            child: ElevatedButton(
+              onPressed: () {}, 
+              child: Text(
+                'Order',
+                style: TextStyle(
+                  height: 1,
+                  color: Colors.white,
+                  fontSize: 18),
+              )
+            ),
+          ),
+          DView.height(20),
         ],
       ),
     );
   }
 
-  Padding groupItemInfo() {
+  Padding description() {
+    return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DView.textTitle('Description', color: Colors.black87),
+              DView.height(8),
+              Text(
+                shop.description,
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        );
+  }
+
+  Padding category() {
+    return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DView.textTitle('Category', color: Colors.black87),
+              DView.height(8),
+              Wrap(
+                spacing: 8,
+                children: [
+                  'Regular',
+                  'Express',
+                  'Economical',
+                  'Exclusive',
+                ].map((e) {
+                  return Chip(
+                    visualDensity: const VisualDensity(vertical: -4),
+                    label: Text(e, style: const TextStyle(height: 1)),
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(color: AppColors.primary),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                    padding: EdgeInsets.symmetric(horizontal: 2),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        );
+  }
+
+  Padding groupItemInfo(BuildContext context) {
     return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 26),
           child: Row(
@@ -70,12 +153,15 @@ class DetailShopPage extends StatelessWidget {
                       shop.location,
                     ),
                     DView.height(6),
-                    itemInfo(      
-                      Image.asset(
-                        AppAssets.wa,
-                        width: 20,
+                    GestureDetector(
+                      onTap: () => launchWA(context, shop.whatsapp),
+                      child: itemInfo(      
+                        Image.asset(
+                          AppAssets.wa,
+                          width: 20,
+                        ),
+                        shop.whatsapp,
                       ),
-                      shop.whatsapp,
                     ),
                   ],
                 ),
