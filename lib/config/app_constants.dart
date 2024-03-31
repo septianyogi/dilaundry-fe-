@@ -1,6 +1,6 @@
-import 'package:d_view/d_view.dart';
 import 'package:dilaundry/pages/dashboard_views/account_view.dart';
 import 'package:dilaundry/pages/dashboard_views/home_view.dart';
+import 'package:dilaundry/pages/dashboard_views/my_laundry_view.dart';
 import 'package:flutter/material.dart';
 
 class AppConstant {
@@ -34,7 +34,7 @@ class AppConstant {
       'label':'Home',
     },
     {
-      'view':DView.empty('My Laundry'),
+      'view': const MyLaundryView(),
       'icon':Icons.local_laundry_service,
       'label':'My Laundry',
     },

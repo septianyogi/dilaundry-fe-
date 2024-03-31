@@ -28,6 +28,7 @@ class DetailShopPage extends StatelessWidget {
     );
     if(yes??false) {
       final link = WhatsAppUnilink(
+        // phoneNumber: number,
         phoneNumber: '6288225403007',
         text: 'Helo, I want to order a laundry service',
       );
