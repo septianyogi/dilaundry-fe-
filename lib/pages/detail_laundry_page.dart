@@ -1,6 +1,10 @@
 import 'package:d_view/d_view.dart';
 import 'package:dilaundry/config/app_assets.dart';
+import 'package:dilaundry/config/app_colors.dart';
+import 'package:dilaundry/config/app_format.dart';
+import 'package:dilaundry/config/nav.dart';
 import 'package:dilaundry/models/laundry_model.dart';
+import 'package:dilaundry/pages/detail_shop_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -27,9 +31,72 @@ class DetailLaundryPage extends StatelessWidget {
                 color: Colors.grey
               ),
             ),
-          )
+          ),
+          DView.height(),
+          itemInfo(Icons.sell, AppFormat.longPrice(laundry.total)),
+          divider(),
+          itemInfo(Icons.event, AppFormat.fullDate(laundry.createdAt)),
+          divider(),
+          InkWell(
+            onTap: () {
+              Nav.push(context, DetailShopPage(shop: laundry.shop));
+            },
+            child: itemInfo(Icons.store, laundry.shop.name)),
+          divider(),
+          itemInfo(Icons.shopping_basket, '${laundry.weight} kg'),
+          divider(),
+          itemInfo(Icons.shopping_bag, 'Pickup'),
+          itemDescription(laundry.pickupAddress),
+          divider(),
+          itemInfo(Icons.local_shipping, 'Delivery'),
+          itemDescription(laundry.deliveryAddress),
+          divider(),
+          itemInfo(Icons.description, 'Description'),
+          itemDescription(laundry.description),
+          divider(),
         ],
       ),
+    );
+  }
+
+  Widget itemInfo(IconData icon, String info) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.primary,),
+          DView.width(10),
+          Text(info)
+        ],
+      ),
+    );
+  }
+
+  Widget itemDescription(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Row(
+        children: [
+          Icon(Icons.abc, color: Colors.transparent),
+          DView.width(10),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.black54
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Divider divider() {
+    return Divider(
+      indent: 30,
+      endIndent: 30,
+      color: Colors.grey[400],
     );
   }
 
