@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_import, prefer_const_constructors
+
 import 'package:d_view/d_view.dart';
 import 'package:dilaundry/config/app_assets.dart';
 import 'package:dilaundry/config/app_colors.dart';
@@ -45,12 +47,12 @@ class DetailLaundryPage extends StatelessWidget {
           divider(),
           itemInfo(Icons.shopping_basket, '${laundry.weight} kg'),
           divider(),
-          itemInfo(Icons.shopping_bag, 'Pickup'),
-          itemDescription(laundry.pickupAddress),
-          divider(),
-          itemInfo(Icons.local_shipping, 'Delivery'),
-          itemDescription(laundry.deliveryAddress),
-          divider(),
+          if(laundry.withPickup) itemInfo(Icons.shopping_bag, 'Pickup'),
+          if(laundry.withPickup) itemDescription(laundry.pickupAddress),
+          if(laundry.withPickup) divider(),
+          if(laundry.withDelivery)itemInfo(Icons.local_shipping, 'Delivery'),
+          if(laundry.withDelivery) itemDescription(laundry.deliveryAddress),
+          if(laundry.withDelivery) divider(),
           itemInfo(Icons.description, 'Description'),
           itemDescription(laundry.description),
           divider(),

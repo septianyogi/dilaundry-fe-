@@ -24,8 +24,9 @@ class _SearchByCityPageState extends ConsumerState<SearchByCityPage> {
   final edtSearch = TextEditingController();
 
   execute() {
-    setSearchByCityStatus(ref, 'Loading');
+    
     ShopDataSource.searchByCity(edtSearch.text).then((value) {
+      setSearchByCityStatus(ref, 'Loading');
       value.fold(
         (failure) {
           switch (failure.runtimeType) {
@@ -33,7 +34,7 @@ class _SearchByCityPageState extends ConsumerState<SearchByCityPage> {
               setSearchByCityStatus(ref, 'Server Error');
               break;
             case NotFoundFailure:
-              setSearchByCityStatus(ref, 'Error Not Found');
+              setSearchByCityStatus(ref, 'Not Found');
               break;
             case ForbiddenFailure:
               setSearchByCityStatus(ref, 'You don\'t have access');
